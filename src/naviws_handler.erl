@@ -8,9 +8,13 @@
 -export([websocket_info/3]).
 % -export([websocket_terminate/3]).
 
-init(Req, Opts) ->
-    navidb_subs:watch(self()),
-    {cowboy_websocket, Req, Opts}.
+-record(state, {
+    subscribe_backend :: atom()
+}).
+
+init(Req, [SubscribeBackend]) ->
+    SubscribeBackend:watch(self()),
+    {cowboy_websocket, Req, #state{subscribe_backend = SubscribeBackend}}.
 
 websocket_handle({text, Msg}, Req, State) ->
     request(jsxn:decode(Msg, [{error_handler, fun(_, _, _) -> {error, badarg} end}]), Req, State);
@@ -31,9 +35,9 @@ websocket_info(_Info, Req, State) ->
 request({error, badarg}, Req, State) ->
     {reply, {text, << "{\"error\": \"badarg\"}" >>}, Req, State};
 
-request(#{<<"subscribe">> := Subscribes}, Req, State) ->
+request(#{<<"subscribe">> := Subscribes}, Req, #state{subscribe_backend = SubscribeBackend} = State) ->
     Keys = [ tokey(Rec) || Rec <- Subscribes ],
-    navidb_subs:subscribe(self(), Keys),
+    SubscribeBackend:subscribe(self(), Keys),
     {ok, Req, State};
 
 request(_Any, Req, State) ->

@@ -23,14 +23,15 @@ start(_StartType, _StartArgs) ->
     naviws_sup:start_link().
 
 start_phase(listen, _Type, _Args) ->
+    SubscribeBackend = config(subscribe_backend),
     Dispatch = cowboy_router:compile([
         {'_', [
-            {"/websocket", naviws_handler, []}
+            {"/websocket", naviws_handler, [SubscribeBackend]}
         ]}
     ]),
 
     cowboy:start_http(?APP, config(acceptors, 100),
-                      [{port, config(ws_listen_port)}],
+                      [{port, config(port)}],
                       [{env,
                         [{dispatch, Dispatch}]}]),
     ok.

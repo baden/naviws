@@ -3,8 +3,8 @@
 -behaviour(websocket_client_handler).
 
 -export([
-         start_link/0,
          start_link/1,
+         start_link/3,
          send_text/2,
          recv/2,
          recv/1,
@@ -23,11 +23,13 @@
           waiting = undefined :: undefined | pid()
          }).
 
-start_link() ->
-    ct:pal(" ---- start_link", []),
-    start_link("ws://localhost:8983/websocket").
+start_link(Host, Port, Path) ->
+    % FullPath = io_lib:format("ws://~p:~p~p", [Host, Port, Path]),
+    Url = "ws://" ++ Host ++ ":" ++ erlang:integer_to_list(Port) ++ Path,
+    start_link(Url).
 
 start_link(Url) ->
+    ct:pal(" ---- start_link(~p)", [Url]),
     websocket_client:start_link(Url, ?MODULE, []).
 
 stop(Pid) ->

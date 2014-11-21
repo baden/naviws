@@ -5,11 +5,9 @@
     {id, "git"},
     {modules, []},
     {registered, [naviws_sup]},
-    {applications, [kernel,stdlib,cowboy,jsxn,navidb]},
+    {applications, [kernel,stdlib,cowboy,jsxn]},
     {mod, {naviws_app, []}},
     {env, [
-        {ws_listen_port, 8983},
-        {acceptors, 100}
     ]},
     {start_phases, [
         {listen, []}

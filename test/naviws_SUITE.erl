@@ -13,8 +13,12 @@ all() -> [ test_1, test_2 ].
 init_per_suite(Config) ->
     error_logger:tty(false),
     {ok, Modules} = application:ensure_all_started(naviws),
+    {ok, ModulesDb} = application:ensure_all_started(navidb),
+    % {ok, Host} = application:get_env(naviws, host),
+    Host = "localhost",
+    {ok, Port} = application:get_env(naviws, port),
     % {ok, GunModules} = application:ensure_all_started(gun),
-    [{modules, Modules} | Config].
+    [{modules, Modules ++ ModulesDb}, {host, Host}, {port, Port} | Config].
 
 end_per_suite(Config) ->
     Modules = ?config(modules, Config),
@@ -24,10 +28,12 @@ end_per_suite(Config) ->
     ok.
 
 
--define(PORT, 8983).
+% -define(PORT, 8983).
 
-test_1(_) ->
-    {ok, Pid} = ws_client:start_link(),
+test_1(Config) ->
+    Host = ?config(host, Config),
+    Port = ?config(port, Config),
+    {ok, Pid} = ws_client:start_link(Host, Port, "/websocket"),
     % timer:sleep(50),
     ?assertMatch({ok, [_]}, navidb_subs:pids()),    % Один пид
     % Произведем подписку на обновление ресурса
