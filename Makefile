@@ -16,7 +16,8 @@ PLT_APPS = crypto public_key ssl
 # bear not got automaticaly by folsom, bug?
 DEPS = lager cowboy jsx jsxn
 
-dep_cowboy = git git://github.com/ninenines/cowboy.git 2.0.0-pre.1
+#dep_cowboy = git git://github.com/ninenines/cowboy.git 2.0.0-pre.1
+dep_cowboy = git git://github.com/baden/cowboy.git master
 dep_jsx = git git://github.com/baden/jsx.git develop
 dep_jsxn = git git://github.com/talentdeficit/jsxn.git v2.1.1
 
