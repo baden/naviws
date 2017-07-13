@@ -51,7 +51,7 @@ test_1(Config) ->
     % Document = navidb:get(accounts, {username, <<"baden">>}),
     % ?debugFmt(" Document = ~p", [Document]),
     % Установим значение поля
-    navidb:set(accounts, {username, <<"baden">>}, #{foo => <<"bar">>}),
+    navidb:set(accounts, {username, <<"baden">>}, #{<<"foo">> => <<"bar">>}),
 
     % Websocket-клиент должен получить уведомление
     {text, Response} = ws_client:recv(Pid),

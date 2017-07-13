@@ -26,7 +26,7 @@ dep_jsxn = git git://github.com/talentdeficit/jsxn.git v2.1.1
 TEST_DEPS = navidb websocket_client
 # dep_ct_helper = git https://github.com/extend/ct_helper.git master
 dep_websocket_client = git git://github.com/jeremyong/websocket_client.git master
-dep_navidb = git git://github.com/baden/navidb.git master
+dep_navidb = git git://github.com/baden/navidb.git refresh2017
 
 include erlang.mk
 
